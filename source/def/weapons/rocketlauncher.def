@@ -75,8 +75,8 @@ entityDef weapon_rocketlauncher
 	"inv_icon"					"gfx/guis/hud/icons/item_rocket.tga"
 	"inv_name"					"#str_107409"	
 
-	"fireRate"					".8"
-	"reloadRate"				".8"
+	"fireRate"					".2"
+	"reloadRate"				".2"
 	"spread"					"0"
 
 	"ammoRegenStep"				"1"
@@ -95,7 +95,7 @@ entityDef weapon_rocketlauncher
 	"muzzle_kick_angles"		"-15 0 0"
 	"muzzle_kick_offset"		"3 0 3"
 
-	"recoilTime"				"500"
+	"recoilTime"				"0"
 	"recoilAngles"				"-.20 0 0"
 	
 	"mtr_flashShader"			"lights/muzzleflash"
@@ -325,7 +325,7 @@ entityDef projectile_rocket
 	"def_damage"				"damage_rocketDirect"
 	"def_splash_damage"			"damage_rocketSplash"
 																											
-	"speed"						"9"
+	"speed"						"900"
 	"fuse"						"6"
 	"push"						"48000"
 	
@@ -359,6 +359,16 @@ entityDef projectile_rocket
 entityDef projectile_rocket_mp
 {
 	"inherit"					"projectile_rocket"
+
+	"linear_friction"			"0"
+	"angular_friction"			"0"
+	"contact_friction"			"10"
+
+	"gravity"					"0.25"
+
+	"fuse"						"2.5"
+
+
 	"predictTime"				"50"
 }
 
