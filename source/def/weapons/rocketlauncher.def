@@ -85,7 +85,7 @@ entityDef weapon_rocketlauncher
 	"weaponname"				"Rocket Launcher"
 	"def_projectile"			"projectile_rocket"
 	"ammoType"					"ammo_rocketlauncher"
-	"clipSize"					"1"
+	"clipSize"					"50"
 	"ammoRequired"				"1"
 	"gui"						"guis/weapons/rocketlauncher_ammo.gui"
 	"mtr_icon"					"gfx/guis/hud/icons/gun_rocketlauncher"
@@ -95,14 +95,14 @@ entityDef weapon_rocketlauncher
 	"muzzle_kick_angles"		"-15 0 0"
 	"muzzle_kick_offset"		"3 0 3"
 
-	"recoilTime"				"0"
-	"recoilAngles"				"-.20 0 0"
+	"recoilTime"				"1"
+	"recoilAngles"				"-.30 0 0"
 	
 	"mtr_flashShader"			"lights/muzzleflash"
-	"flashColor"				"0.99 0.84 .31"
+	"flashColor"				"0.31 0.84 .99"
 	"flashRadius"				"200"
 	"flashPointLight"			"1"
-	"flashTime"					".1"
+	"flashTime"				".5"
 	"flashViewOffset"			"15 -5 -5"
 
 	"mtr_guiLightShader"		"lights/viewWeaponGuiLight"
@@ -364,7 +364,7 @@ entityDef projectile_rocket_mp
 	"angular_friction"			"0"
 	"contact_friction"			"10"
 
-	"gravity"					"0.25"
+	"gravity"					"0.5"
 
 	"fuse"						"2.5"
 
