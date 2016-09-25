@@ -2599,6 +2599,8 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 		if ( altAttack ? wfl.attackAltHitscan : wfl.attackHitscan ) {
 			Hitscan( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, power );
 		} else {
+			//viewModel->StopSound(SND_CHANNEL_ANY, false);
+			viewModel->StartSound("snd_fire", SND_CHANNEL_VOICE, 0, false, NULL);
 			LaunchProjectiles( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, fuseOffset, power );
 		}
 		//asalmon:  changed to keep stats even in single player 
