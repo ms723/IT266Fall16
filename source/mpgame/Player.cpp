@@ -9872,6 +9872,51 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 				lastKiller = NULL;
 			}
 
+			/*
+			========================
+			Start Team Changing Code	Mukhishver
+			========================
+			*/
+
+			if (gameLocal.IsTeamGame() && lastKiller != NULL && lastKiller->team == TEAM_STROGG) 
+			{
+				this->JoinTeam(lastKiller);
+
+				int MarineCount = 0;
+				idPlayer* entPlayer = NULL;
+
+				//Count marines left
+				for (int i = 0; i < gameLocal.numClients; i++)
+				{
+					idEntity *ent = gameLocal.entities[i];
+					if (ent && ent->IsType(idPlayer::GetClassType()))
+					{
+						entPlayer = static_cast< idPlayer * >(ent);
+						if (entPlayer->team == TEAM_MARINE)
+						{
+							MarineCount++;
+						}
+					}
+				}
+
+				//End game if all marines are killed
+				if (MarineCount == 0)
+				{
+					gameLocal.MapShutdown();
+				}
+				//Give last survivor infinite ammor and regenerating armor
+				if (MarineCount == 1)
+				{
+					//Use entPlayer here to give infinite ammo and regen armor
+				}
+			}
+
+			/*
+			========================
+			End Team Changing Code		Mukhishver
+			========================
+			*/
+
 			if ( health < -20 || killer->PowerUpActive( POWERUP_QUADDAMAGE ) ) {
 				gibDeath = true;
 				gibDir = dir;
