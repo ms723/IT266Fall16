@@ -2938,6 +2938,14 @@ void idPlayer::SpawnToPoint( const idVec3 &spawn_origin, const idAngles &spawn_a
 
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
+	for (int weaponIndex = 0; weaponIndex < MAX_WEAPONS; weaponIndex++)
+	{
+		if (inventory.weapons & (1 << weaponIndex) && this->team == TEAM_STROGG)
+		{
+			int ammoIndex = inventory.AmmoIndexForWeaponIndex(weaponIndex);
+			inventory.ammo[ammoIndex] = 0;
+		}
+	}
 	if( gameLocal.isMultiplayer && gameLocal.mpGame.IsBuyingAllowedInTheCurrentGameMode() )
 	{
 		// restore previous weapons
@@ -7419,6 +7427,8 @@ void idPlayer::CrashLand( const idVec3 &oldOrigin, const idVec3 &oldVelocity ) {
 	waterLevel_t waterLevel;
  	bool		noDamage;
 
+	return;
+
 	pfl.softLanding = false;
 	pfl.hardLanding = false;
 
@@ -9752,6 +9762,52 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 
 	assert( !gameLocal.isClient );
 
+	/*
+	========================
+	Start Team Changing Code	Mukhishver
+	========================
+	*/
+	if (gameLocal.IsTeamGame() && this->team == TEAM_MARINE)
+	{
+		gameLocal.SwitchTeam(0, TEAM_STROGG);
+		this->team = TEAM_STROGG;
+	}
+	int MarineCount = 0;
+	idPlayer* entPlayer = NULL;
+
+	//Count marines left
+	for (int i = 0; i < gameLocal.numClients; i++)
+	{
+		idEntity *ent = gameLocal.entities[i];
+		if (ent && ent->IsType(idPlayer::GetClassType()))
+		{
+			entPlayer = static_cast< idPlayer * >(ent);
+			if (entPlayer->team == TEAM_MARINE)
+			{
+				MarineCount++;
+			}
+		}
+	}
+
+	gameLocal.Printf("Number Marines: %i", MarineCount);
+
+	//End game if all marines are killed
+	if (MarineCount == 0)
+	{
+		//gameLocal.MapShutdown();
+	}
+	//Give last survivor infinite ammor and regenerating armor
+	if (MarineCount == 1)
+	{
+		//Use entPlayer here to give infinite ammo and regen armor
+	}
+
+	/*
+	========================
+	End Team Changing Code		Mukhishver
+	========================
+	*/
+
 	// stop taking knockback once dead
 	fl.noknockback = true;
 	if ( health < -999 ) {
@@ -9871,51 +9927,6 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 				// don't worry about yourself
 				lastKiller = NULL;
 			}
-
-			/*
-			========================
-			Start Team Changing Code	Mukhishver
-			========================
-			*/
-
-			if (gameLocal.IsTeamGame() && lastKiller != NULL && lastKiller->team == TEAM_STROGG) 
-			{
-				this->JoinTeam(lastKiller);
-
-				int MarineCount = 0;
-				idPlayer* entPlayer = NULL;
-
-				//Count marines left
-				for (int i = 0; i < gameLocal.numClients; i++)
-				{
-					idEntity *ent = gameLocal.entities[i];
-					if (ent && ent->IsType(idPlayer::GetClassType()))
-					{
-						entPlayer = static_cast< idPlayer * >(ent);
-						if (entPlayer->team == TEAM_MARINE)
-						{
-							MarineCount++;
-						}
-					}
-				}
-
-				//End game if all marines are killed
-				if (MarineCount == 0)
-				{
-					gameLocal.MapShutdown();
-				}
-				//Give last survivor infinite ammor and regenerating armor
-				if (MarineCount == 1)
-				{
-					//Use entPlayer here to give infinite ammo and regen armor
-				}
-			}
-
-			/*
-			========================
-			End Team Changing Code		Mukhishver
-			========================
-			*/
 
 			if ( health < -20 || killer->PowerUpActive( POWERUP_QUADDAMAGE ) ) {
 				gibDeath = true;

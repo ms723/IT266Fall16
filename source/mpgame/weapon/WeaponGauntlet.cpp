@@ -285,6 +285,15 @@ void rvWeaponGauntlet::Attack ( void ) {
 			if ( ent->fl.takedamage ) {
 				float dmgScale = 1.0f;
 				dmgScale *= owner->PowerUpModifier( PMOD_MELEE_DAMAGE );
+
+				if (ent->IsType(idPlayer::GetClassType())) {
+					idPlayer * player = static_cast< idPlayer* >(ent);
+					if (player->team == TEAM_STROGG)
+					{
+						dmgScale = dmgScale * 100000;
+					}
+				}
+				
 				ent->Damage ( owner, owner, playerViewAxis[0], spawnArgs.GetString ( "def_damage" ), dmgScale, 0 );
 				StartSound( "snd_hit", SND_CHANNEL_ANY, 0, false, NULL );
 				if ( ent->spawnArgs.GetBool( "bleed" ) ) {

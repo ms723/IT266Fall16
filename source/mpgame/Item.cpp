@@ -963,7 +963,10 @@ void idItem::Event_Touch( idEntity *other, trace_t *trace ) {
 // RAVEN END
 		return;
 	}
-
+	if (static_cast<idPlayer *>(other)->team == TEAM_STROGG)
+	{
+		canPickUp = false;
+	}
 	if ( !canPickUp ) {
 		return;
 	}
