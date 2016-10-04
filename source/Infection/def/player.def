@@ -1074,7 +1074,7 @@ entityDef player_marine_mp
 	"weapon10_best"			"1"
 
 	// stats
-	"health"			"125"
+	"health"			"100"
 	"armor"				"0"
 
 	"ammo_none"			"-1"
