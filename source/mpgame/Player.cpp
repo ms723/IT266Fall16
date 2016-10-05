@@ -9767,11 +9767,6 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 	Start Team Changing Code	Mukhishver
 	========================
 	*/
-	if (gameLocal.IsTeamGame() && this->team == TEAM_MARINE)
-	{
-		gameLocal.SwitchTeam(0, TEAM_STROGG);
-		this->team = TEAM_STROGG;
-	}
 	int MarineCount = 0;
 	idPlayer* entPlayer = NULL;
 
@@ -9788,13 +9783,15 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 			}
 		}
 	}
-
-	gameLocal.Printf("Number Marines: %i", MarineCount);
-
-	//End game if all marines are killed
-	if (MarineCount == 0)
+	if (gameLocal.IsTeamGame() && this->team == TEAM_MARINE)
 	{
-		//gameLocal.MapShutdown();
+		gameLocal.mpGame.JoinTeam("strogg");
+		MarineCount--;
+	}
+	//End game if all marines are killed
+	if (MarineCount <= 0)
+	{
+		gameLocal.mpGame.GetGameState()->NewState(GAMEREVIEW);
 	}
 	//Give last survivor infinite ammor and regenerating armor
 	if (MarineCount == 1)

@@ -1795,6 +1795,22 @@ void idMultiplayerGame::PlayerDeath( idPlayer *dead, idPlayer *killer, int metho
 
 	if ( killer ) {
 		if ( gameLocal.IsTeamGame() ) {
+			int MarineCount = -1;
+			idPlayer* entPlayer = NULL;
+
+			//Count marines left
+			for (int i = 0; i < gameLocal.numClients; i++)
+			{
+				idEntity *ent = gameLocal.entities[i];
+				if (ent && ent->IsType(idPlayer::GetClassType()))
+				{
+					entPlayer = static_cast< idPlayer * >(ent);
+					if (entPlayer->team == TEAM_MARINE)
+					{
+						MarineCount++;
+					}
+				}
+			}
 			if ( killer == dead || killer->team == dead->team ) {
 				// suicide or teamkill
 
@@ -1804,6 +1820,10 @@ void idMultiplayerGame::PlayerDeath( idPlayer *dead, idPlayer *killer, int metho
 					AddPlayerTeamScore( killer == dead ? dead : killer, -1 );
 				} else {
 					AddPlayerScore( killer == dead ? dead : killer, -1 );
+					if (killer->team == TEAM_MARINE && MarineCount <= 0)
+					{
+						AddTeamScore(killer->team, -1);
+					}
 				}
 
 			} else {
@@ -1818,11 +1838,18 @@ void idMultiplayerGame::PlayerDeath( idPlayer *dead, idPlayer *killer, int metho
 				}
 			}
 			if( gameLocal.gameType == GAME_TDM ) {
+				
 				if ( killer == dead || killer->team == dead->team ) {
 					// suicide or teamkill
-					AddTeamScore( killer->team, -1 );
+					if (killer->team == TEAM_MARINE && MarineCount <= 0)
+					{
+						AddTeamScore(killer->team, -1);
+					}
 				} else {
-					AddTeamScore( killer->team, 1 );
+					if (dead->team == TEAM_MARINE && MarineCount <= 0)
+					{
+						AddTeamScore(killer->team, 1);
+					}
 				}			
 			}
 		} else {
@@ -1851,7 +1878,26 @@ void idMultiplayerGame::PlayerDeath( idPlayer *dead, idPlayer *killer, int metho
 			AddPlayerTeamScore( dead, -1 );
 		}
 		if( gameLocal.gameType == GAME_TDM ) {
-			AddTeamScore( dead->team, -1 );
+			int MarineCount = -1;
+			idPlayer* entPlayer = NULL;
+
+			//Count marines left
+			for (int i = 0; i < gameLocal.numClients; i++)
+			{
+				idEntity *ent = gameLocal.entities[i];
+				if (ent && ent->IsType(idPlayer::GetClassType()))
+				{
+					entPlayer = static_cast< idPlayer * >(ent);
+					if (entPlayer->team == TEAM_MARINE)
+					{
+						MarineCount++;
+					}
+				}
+			}
+			if (dead->team == TEAM_MARINE && MarineCount <= 0)
+			{
+				AddTeamScore(dead->team, -1);
+			}
 		}
 	}
 	

@@ -930,14 +930,8 @@ void rvTeamDMGameState::Run( void ) {
 				}
 			} else if ( gameLocal.mpGame.TimeLimitHit() ) {
 				gameLocal.mpGame.PrintMessageEvent( -1, MSG_TIMELIMIT );
-				if( tiedForFirst ) {
-					// if tied at timelimit hit, goto sudden death
-					fragLimitTimeout = 0;
-					NewState( SUDDENDEATH );
-				} else {
-					// or just end the game
-					NewState( GAMEREVIEW );
-				}
+				gameLocal.mpGame.SetScoreForTeam(TEAM_MARINE, gameLocal.mpGame.GetScoreForTeam(TEAM_MARINE) + 1);
+				NewState( GAMEREVIEW );
 			} else if( tiedForFirst && team >= 0 ) {
 				// check for the rare case that two teams both hit the fraglimit the same frame
 				// two people tied at fraglimit, advance to sudden death after a delay

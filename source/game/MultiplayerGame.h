@@ -553,6 +553,7 @@ public:
 
 	// asalmon: Get the score for a team.
 	int				GetScoreForTeam( int i );
+	void			SetScoreForTeam (int team, int score );
 	int				GetTeamsTotalFrags( int i );
 	int				GetTeamsTotalScore( int i );
 	idUserInterface *GetMainGUI() {return mainGui;}
@@ -912,6 +913,12 @@ ID_INLINE int idMultiplayerGame::GetScoreForTeam( int i ) {
 	return teamScore[ i ];
 }
 
+ID_INLINE void idMultiplayerGame::SetScoreForTeam(int team, int score) {
+	if (team < 0 || team > TEAM_MAX) {
+		return;
+	}
+	teamScore[team] = score;
+}
 ID_INLINE int idMultiplayerGame::TeamLeader( void ) {
 	if( teamScore[ TEAM_MARINE ] == teamScore[ TEAM_STROGG ] ) {
 		return -1;
