@@ -290,7 +290,7 @@ void rvWeaponGauntlet::Attack ( void ) {
 					idPlayer * player = static_cast< idPlayer* >(ent);
 					if (player->team == TEAM_STROGG)
 					{
-						dmgScale = dmgScale * 100000;
+						dmgScale *= 100000.0f;
 					}
 				}
 				
