@@ -9975,15 +9975,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 		MarineCount--;
 	}
 	//End game if all marines are killed
-	if (MarineCount <= 0)
-	{
-		gameLocal.mpGame.GetGameState()->NewState(GAMEREVIEW);
-	}
-	//Give last survivor infinite ammor and regenerating armor
-	if (MarineCount == 1)
-	{
-		//Use lastManStanding here to give infinite ammo and regen armor
-	}
+	
 
 	/*
 	========================
@@ -9998,6 +9990,16 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 	aiManager.RemoveTeammate( this );
 	
 	isChatting = false;
+
+	if (MarineCount <= 0)
+	{
+		gameLocal.mpGame.GetGameState()->SetNextMPGameState(GAMEREVIEW);
+	}
+	//Give last survivor infinite ammor and regenerating armor
+	if (MarineCount == 1)
+	{
+		//Use lastManStanding here to give infinite ammo and regen armor
+	}
 }
 
 /*
