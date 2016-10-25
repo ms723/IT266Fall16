@@ -9974,7 +9974,6 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 		gameLocal.mpGame.JoinTeam("strogg");
 		MarineCount--;
 	}
-	//End game if all marines are killed
 	
 
 	/*
@@ -9991,6 +9990,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 	
 	isChatting = false;
 
+	//End game if all marines are killed
 	if (MarineCount <= 0)
 	{
 		gameLocal.mpGame.GetGameState()->SetNextMPGameState(GAMEREVIEW);
