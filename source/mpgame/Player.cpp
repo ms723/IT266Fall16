@@ -9965,13 +9965,13 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 			if (entPlayer->team == TEAM_MARINE)
 			{
 				MarineCount++;
-				lastManStanding = static_cast<idPlayer *>(ent);
 			}
 		}
 	}
 	if (gameLocal.IsTeamGame() && this->team == TEAM_MARINE)
 	{
-		gameLocal.mpGame.JoinTeam("strogg");
+		this->team = TEAM_STROGG;
+		this->JoinTeam(this);
 		MarineCount--;
 	}
 	
@@ -9998,7 +9998,21 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 	//Give last survivor infinite ammor and regenerating armor
 	if (MarineCount == 1)
 	{
+		for (int i = 0; i < gameLocal.numClients; i++)
+		{
+			idEntity *ent = gameLocal.entities[i];
+			if (ent && ent->IsType(idPlayer::GetClassType()))
+			{
+				entPlayer = static_cast< idPlayer * >(ent);
+				if (entPlayer->team == TEAM_MARINE)
+				{
+					lastManStanding = entPlayer;
+				}
+			}
+		}
 		//Use lastManStanding here to give infinite ammo and regen armor
+		lastManStanding->GivePowerUp(POWERUP_HASTE, -1);
+		lastManStanding->GivePowerUp(POWERUP_REGENERATION, -1);
 	}
 }
 
